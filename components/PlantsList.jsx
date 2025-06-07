@@ -1,6 +1,13 @@
 import { plantsArray } from "../data/data";
+import { addItem } from "../redux/CartSlice";
+import { useDispatch } from "react-redux";
 
-export default function PlantsList({ onhandleAddToCart }) {
+export default function PlantsList() {
+  const dispatch = useDispatch();
+
+  function handleAddToCart(text) {
+    dispatch(addItem(text));
+  }
   return (
     <div className="product-grid">
       {plantsArray.map((category, index) => (
@@ -11,8 +18,8 @@ export default function PlantsList({ onhandleAddToCart }) {
           </h1>
           <div className="product-list">
             {" "}
-            {category.plants.map((plant, plantIndex) => (
-              <div className="product-card" key={plantIndex}>
+            {category.plants.map((plant, id) => (
+              <div className="product-card" key={id}>
                 {" "}
                 <img
                   className="product-image"
@@ -22,7 +29,17 @@ export default function PlantsList({ onhandleAddToCart }) {
                 <div className="product-title">{plant.name}</div>{" "}
                 <div className="product-description">{plant.description}</div>{" "}
                 <div className="product-cost">{plant.cost}</div>{" "}
-                <button className="product-button" onClick={onhandleAddToCart}>
+                <button
+                  className="product-button"
+                  onClick={() =>
+                    handleAddToCart({
+                      name: plant.name,
+                      image: plant.image,
+                      cost: plant.cost,
+                      id: plant.id,
+                    })
+                  }
+                >
                   Add to Cart
                 </button>
               </div>
