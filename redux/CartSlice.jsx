@@ -4,7 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const CartSlice = createSlice({
   name: "cart",
   initialState: {
-    items: [], // Initialize items as an empty array
+    items: [],
   },
   reducers: {
     addItem: (state, action) => {
@@ -13,10 +13,13 @@ export const CartSlice = createSlice({
         (item) => item.name === newItem.name
       );
       if (existingItem) {
-        console.log(`${newItem.name} sudah ada`);
-        existingItem.quantity += 1;
+        return;
       } else {
-        state.items.push({ ...newItem, quantity: 1 }); // pastikan quantity diset
+        state.items.push({
+          ...newItem,
+          quantity: 1,
+          totalCost: newItem.cost * 1,
+        });
       }
     },
     removeItem: (state, action) => {
@@ -29,6 +32,7 @@ export const CartSlice = createSlice({
           state.items.map((item) => {
             if (item.id === id) {
               if (item.quantity > 1) item.quantity -= 1;
+              item.totalCost = item.quantity * item.cost;
             }
           });
           break;
@@ -36,6 +40,7 @@ export const CartSlice = createSlice({
           state.items.map((item) => {
             if (item.id === id) {
               item.quantity += 1;
+              item.totalCost = item.quantity * item.cost;
             }
           });
           break;
@@ -44,6 +49,12 @@ export const CartSlice = createSlice({
   },
 });
 
-export const { addItem, removeItem, updateQuantity } = CartSlice.actions;
+export const {
+  addItem,
+  removeItem,
+  updateQuantity,
+  calculateTotalCost,
+  calculateTotalAmount,
+} = CartSlice.actions;
 
 export default CartSlice.reducer;

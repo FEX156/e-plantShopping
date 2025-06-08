@@ -1,6 +1,20 @@
+import { useSelector } from "react-redux";
+
 export default function Cart({ onCartClick }) {
+  const cart = useSelector((state) => state.cart.items);
+  const cartValue = cart.reduce((value, item) => value + item.quantity, 0);
   return (
-    <div>
+    <div style={{ position: "relative", width: "48px" }}>
+      <div
+        style={{
+          position: "absolute",
+          top: "21px",
+          right: "15px",
+          textAlign: "center",
+        }}
+      >
+        {cartValue}
+      </div>
       <a href="#" onClick={onCartClick}>
         <h1 className="cart">
           <svg
